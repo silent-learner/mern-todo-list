@@ -4,7 +4,7 @@ const cors = require('cors');
 const dotenv = require("dotenv")
 const URI = "mongodb://localhost:27017/kashifdb"
 
-
+const PORT = process.env.PORT || 8080
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -19,8 +19,8 @@ app.get("/*" , (req,res) => {
 mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("MongoDB connected")
-        app.listen(process.env.PORT, () => {
-            console.log(`Server running at http://localhost:${process.env.PORT}`);
+        app.listen(PORT, () => {
+            console.log(`Server running at http://localhost:${PORT}`);
         })
     })
     .catch(err => console.log(err.message))
