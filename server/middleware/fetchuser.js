@@ -10,10 +10,10 @@ const fetchuser = (req,res,next) => {
     try {
         const data = jwt.verify(token , SECRET_KEY)
         req.user = data.user
+        next()
     } catch (error) {
         res.status(401).json({ success,message:"invalid token"})
     }
-    next()
 }
 
 module.exports = fetchuser

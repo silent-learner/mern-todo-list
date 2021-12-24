@@ -1,13 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const dotenv = require("dotenv")
 const URI = "mongodb://localhost:27017/kashifdb"
+
 
 const app = express()
 app.use(cors())
 app.use(express.json())
-
+dotenv.config()
 app.use("/get", require("./routes/getitems.js"))
 app.use("/post", require("./routes/postitems.js"))
 app.use("/delete", require("./routes/deleteitems.js"))
@@ -18,8 +19,8 @@ app.get("/*" , (req,res) => {
 mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("MongoDB connected")
-        app.listen(8080, () => {
-            console.log(`Server running at http://localhost:8080`);
+        app.listen(process.env.PORT, () => {
+            console.log(`Server running at http://localhost:${process.env.PORT}`);
         })
     })
     .catch(err => console.log(err.message))

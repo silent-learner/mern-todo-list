@@ -37,10 +37,12 @@ const LoginForm = (props) => {
                 set();
                 localStorage.setItem('todo-token', json.authtoken)
                 navigate('/home')
+                props.showAlert("Login Successful","success")
                 setprogress(100)
             }
             else{
                 console.log(json.message);
+                props.showAlert(json.message,"danger")
                 setprogress(100)
             }
         }catch(e){
@@ -48,7 +50,7 @@ const LoginForm = (props) => {
         }
     }
     return ( 
-        <div className='container border p-2 mt-3 shadow shadow-primary shadow-intensity-lg' style={{"maxWidth" : "500px" , "fontFamily" : "'Baloo Bhaijaan 2', cursive"}}>
+        <div className='container border p-2 mt-4  bg-white' style={{"maxWidth" : "500px" , "fontFamily" : "'Baloo Bhaijaan 2', cursive"}}>
             <h2 className='text-center mt-3'>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -57,7 +59,7 @@ const LoginForm = (props) => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="password" required  onChange={handleonchange} value={input.password} />
+                    <input type="password" className="form-control" id="password" required  onChange={handleonchange} value={input.password} minLength={5} />
                 </div>
                 <div className="d-flex justify-content-center">
                 <div className='my-1 mx-3'><small>No account ? <span onClick={() =>{ navigate('/signup')}} className='text-primary' style={{"cursor" : "pointer"}}>SignUp</span></small></div>

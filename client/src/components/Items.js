@@ -6,7 +6,6 @@ import '../App.css'
 export default function Items(props) {
     const navigate = useNavigate()
     const header = localStorage.getItem('todo-token')
-    const [toggle, settoggle] = useState(false)
     const [item, setitem] = useState("")
     const [items, setitems] = useState([])
     const onchangehandle = (e) => {
@@ -28,7 +27,12 @@ export default function Items(props) {
                 })
                 const json = await data.json()
                 // console.log(json);
-                setitems(json.list)
+                if (json.success) {
+                    setitems(json.list)
+                }
+                else{
+                    props.showAlert(json.message,"danger")
+                }
             }
             fetchdata()
         }
@@ -40,14 +44,10 @@ export default function Items(props) {
         e.preventDefault();
         let listitem = item.trim()
         if (listitem === '') {
-            settoggle(true)
-            setTimeout(() => {
-                settoggle(false);
-            }, 1500)
+            props.showAlert('Enter Something', 'danger')
         }
         else {
             try {
-                settoggle(false);
                 setitem('');
                 listitem = listitem.charAt(0).toUpperCase() + listitem.slice(1);
                 const postdata = async () => {
@@ -62,17 +62,26 @@ export default function Items(props) {
                     })
                     const datajson = await data.json()
                     console.log(datajson);
-                    const fetchdata = async () => {
-                        const data = await fetch(`http://192.168.43.167:8080/get`, {
-                            method: "GET",
-                            headers: {
-                                "Content-type": "application/json; charset=UTF-8",
-                                "auth-token" : header                            }
-                        })
-                        const json = await data.json()
-                        setitems(json.list)
+                    if (datajson.success) {
+                        props.showAlert("Item added !!", "success")
+                        const fetchdata = async () => {
+                            const data = await fetch(`http://192.168.43.167:8080/get`, {
+                                method: "GET",
+                                headers: {
+                                    "Content-type": "application/json; charset=UTF-8",
+                                    "auth-token" : header                            }
+                            })
+                            const json = await data.json()
+                            if (json.success) {
+                                setitems(json.list)
+                            }else{
+                                props.showAlert(json.message,"danger")
+                            }
+                        }
+                        fetchdata()
+                    }else{
+                        props.showAlert(datajson.message,"danger")
                     }
-                    fetchdata()
                 }
                 postdata();
             } catch (error) {
@@ -94,18 +103,23 @@ export default function Items(props) {
                             "auth-token" : header                        }
                     })
                     const datajson = await data.json()
-                    console.log(datajson);
-                    const fetchdata = async () => {
-                        const data = await fetch(`http://192.168.43.167:8080/get`, {
-                            method: "GET",
-                            headers: {
-                                "Content-type": "application/json; charset=UTF-8",
-                                "auth-token" : header                            }
-                        })
-                        const json = await data.json()
-                        setitems(json.list)
+                    if (datajson.success) {
+                        props.showAlert("Item deleted!!" , "success")
+                        console.log(datajson);
+                        const fetchdata = async () => {
+                            const data = await fetch(`http://192.168.43.167:8080/get`, {
+                                method: "GET",
+                                headers: {
+                                    "Content-type": "application/json; charset=UTF-8",
+                                    "auth-token" : header                            }
+                            })
+                            const json = await data.json()
+                            setitems(json.list)
+                        }
+                        fetchdata()
+                    }else{
+                        props.showAlert(datajson.message,"danger")
                     }
-                    fetchdata()
                 }
                 postdata();
             } catch (error) {
@@ -115,12 +129,7 @@ export default function Items(props) {
     }
 
     return (
-        <div className='item-bg container border p-2 mt-3 shadow-lg' style={{"maxWidth" : "500px"}}>
-            {
-                toggle && <div id='alert' className="alert alert-danger fade show" role="alert">
-                    <strong>Heyy!! </strong>Enter Something.
-                </div>
-            }
+        <div className='container border p-2 mt-4 mb-3  bg-white d-flex flex-column' style={{"maxWidth" : "500px", "fontFamily" : "'Baloo Bhaijaan 2', cursive"}}>
             <div className='container-fluid p-0 my-3'>
                 <form className="row p-2" onSubmit={onclickhandle} autoComplete='off'>
                     <div className="col-sm-8 p-1 my-1">
@@ -131,10 +140,11 @@ export default function Items(props) {
                     </div>
                 </form>
             </div>
+            {!items.length ? <p className='text-center text-secondary'>No items in list.</p> : ''}
             <div className="container-fluid p-0 mb-2">
                     {
                         items.map((item) => {
-                            return <Item key={item._id} header={header} name={item.name} date={item.createdAt} id={item._id} updatedAt={item.updatedAt} handeler={deleteEle} />
+                            return <Item key={item._id} header={header} name={item.name} date={item.createdAt} id={item._id} updatedAt={item.updatedAt} handeler={deleteEle} showAlert={props.showAlert}/>
                         })
                     }
             </div>

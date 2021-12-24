@@ -40,10 +40,12 @@ const SignupForm = (props) => {
                 set();
                 localStorage.setItem('todo-token', json.authtoken)
                 navigate('/home')
+                props.showAlert("Signed in successfully","danger")
                 setprogress(100)
             }
             else{
                 console.log(json.message);
+                props.showAlert(json.message,"danger")
                 setprogress(100)
             }
         }
@@ -52,7 +54,7 @@ const SignupForm = (props) => {
         }
     }
     return (
-        <div className='container border p-2 mt-3 shadow-lg' style={{"maxWidth" : "500px" , "fontFamily" : "'Baloo Bhaijaan 2', cursive"}} >
+        <div className='container border p-2 mt-3  bg-white' style={{"maxWidth" : "500px" , "fontFamily" : "'Baloo Bhaijaan 2', cursive"}} >
             <h2 className='text-center mt-3'>Sign Up</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">

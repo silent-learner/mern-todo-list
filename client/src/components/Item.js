@@ -9,7 +9,6 @@ export default function Item(props) {
     const handleOnsubmit = (e) => {
         e.preventDefault()
         update(props.id)
-        setisEditing(false)
     }
     const update = async (id) => {
         let item = input
@@ -31,8 +30,14 @@ export default function Item(props) {
                     }
                 })
                 const datajson = await data.json()
-                console.log(datajson);
-                settitle(item1.trim())
+                if (datajson.success) {
+                    props.showAlert("Item Updated!!","success")
+                    console.log(datajson);
+                    settitle(item1.trim())
+                }else{
+                        props.showAlert(datajson.message,"danger")
+                }
+                setisEditing(false)
             }
             postdata()
         } catch (error) {

@@ -10,6 +10,7 @@ export default function Navbar(props) {
         props.setprogress(20)
         localStorage.removeItem('todo-token')
         navigate('/')
+        props.showAlert("Signed Out!","warning")
         props.setprogress(100)
     }
     return (
