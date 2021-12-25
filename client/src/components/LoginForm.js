@@ -22,7 +22,7 @@ const LoginForm = (props) => {
         setprogress(5);
         try{
             e.preventDefault()
-            const data = await fetch('http://192.168.43.167:8080/login', {
+            const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/login`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"

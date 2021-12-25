@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Item from "./Item.js"
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import '../App.css'
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 export default function Items(props) {
     const navigate = useNavigate()
@@ -15,14 +16,14 @@ export default function Items(props) {
         if (!props.header) {
             navigate('/')
         }
-        else{
+        else {
             const fetchdata = async () => {
-                const data = await fetch("http://192.168.43.167:8080/get", {
+                const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/get`, {
                     method: "GET",
                     headers: {
                         "Content-type": "application/json",
-                        "auth-token" : header
-    
+                        "auth-token": header
+
                     }
                 })
                 const json = await data.json()
@@ -30,8 +31,8 @@ export default function Items(props) {
                 if (json.success) {
                     setitems(json.list)
                 }
-                else{
-                    props.showAlert(json.message,"danger")
+                else {
+                    props.showAlert(json.message, "danger")
                 }
             }
             fetchdata()
@@ -51,36 +52,38 @@ export default function Items(props) {
                 setitem('');
                 listitem = listitem.charAt(0).toUpperCase() + listitem.slice(1);
                 const postdata = async () => {
-                    const data = await fetch("http://192.168.43.167:8080/post", {
+                    const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/post`, {
                         method: "POST",
                         body: JSON.stringify({
                             name: listitem.trim()
                         }),
                         headers: {
                             "Content-type": "application/json; charset=UTF-8",
-                            "auth-token" : header                        }
+                            "auth-token": header
+                        }
                     })
                     const datajson = await data.json()
                     console.log(datajson);
                     if (datajson.success) {
                         props.showAlert("Item added !!", "success")
                         const fetchdata = async () => {
-                            const data = await fetch(`http://192.168.43.167:8080/get`, {
+                            const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/get`, {
                                 method: "GET",
                                 headers: {
                                     "Content-type": "application/json; charset=UTF-8",
-                                    "auth-token" : header                            }
+                                    "auth-token": header
+                                }
                             })
                             const json = await data.json()
                             if (json.success) {
                                 setitems(json.list)
-                            }else{
-                                props.showAlert(json.message,"danger")
+                            } else {
+                                props.showAlert(json.message, "danger")
                             }
                         }
                         fetchdata()
-                    }else{
-                        props.showAlert(datajson.message,"danger")
+                    } else {
+                        props.showAlert(datajson.message, "danger")
                     }
                 }
                 postdata();
@@ -89,36 +92,38 @@ export default function Items(props) {
             }
         }
     }
-    
+
     const deleteEle = (id) => {
         const sure = window.confirm("Are you sure to delete this item ? ");
         if (sure) {
             try {
                 setitem('');
                 const postdata = async () => {
-                    const data = await fetch(`http://192.168.43.167:8080/delete/${id}`, {
+                    const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/delete/${id}`, {
                         method: "DELETE",
                         headers: {
                             "Content-type": "application/json; charset=UTF-8",
-                            "auth-token" : header                        }
+                            "auth-token": header
+                        }
                     })
                     const datajson = await data.json()
                     if (datajson.success) {
-                        props.showAlert("Item deleted!!" , "success")
+                        props.showAlert("Item deleted!!", "success")
                         console.log(datajson);
                         const fetchdata = async () => {
-                            const data = await fetch(`http://192.168.43.167:8080/get`, {
+                            const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/get`, {
                                 method: "GET",
                                 headers: {
                                     "Content-type": "application/json; charset=UTF-8",
-                                    "auth-token" : header                            }
+                                    "auth-token": header
+                                }
                             })
                             const json = await data.json()
                             setitems(json.list)
                         }
                         fetchdata()
-                    }else{
-                        props.showAlert(datajson.message,"danger")
+                    } else {
+                        props.showAlert(datajson.message, "danger")
                     }
                 }
                 postdata();
@@ -129,7 +134,7 @@ export default function Items(props) {
     }
 
     return (
-        <div className='container border p-2 mt-4 mb-3  bg-white d-flex flex-column' style={{"maxWidth" : "500px", "fontFamily" : "'Baloo Bhaijaan 2', cursive"}}>
+        <div className='container border p-2 mt-4 mb-3  bg-white d-flex flex-column' style={{ "maxWidth": "500px", "fontFamily": "'Baloo Bhaijaan 2', cursive" }}>
             <div className='container-fluid p-0 my-3'>
                 <form className="row p-2" onSubmit={onclickhandle} autoComplete='off'>
                     <div className="col-sm-8 p-1 my-1">
@@ -141,13 +146,21 @@ export default function Items(props) {
                 </form>
             </div>
             {!items.length ? <p className='text-center text-secondary'>No items in list.</p> : ''}
-            <div className="container-fluid p-0 mb-2">
+            <TransitionGroup className="container-fluid p-0 mb-2">
                     {
                         items.map((item) => {
-                            return <Item key={item._id} header={header} name={item.name} date={item.createdAt} id={item._id} updatedAt={item.updatedAt} handeler={deleteEle} showAlert={props.showAlert}/>
+                            return (<CSSTransition
+                                    in={true}
+                                    key={item._id}
+                                    timeout={300}
+                                    classNames='fade'
+                                    unmountOnExit
+                                >
+                                <Item key={item._id} header={header} name={item.name} date={item.createdAt} id={item._id} updatedAt={item.updatedAt} handeler={deleteEle} showAlert={props.showAlert} />
+                            </CSSTransition>)
                         })
                     }
-            </div>
+            </TransitionGroup>
         </div>
     )
 }
