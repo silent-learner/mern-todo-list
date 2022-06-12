@@ -3,3 +3,9 @@ build
 .env.local
 .env
 .vscode/
+.DS_Store
+node_modules/
+.env
+*.orig
+.idea/
+.vscode/

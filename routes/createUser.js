@@ -3,7 +3,7 @@ const { body, validationResult } = require('express-validator');
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router()
-const SECRET_KEY = "#!^@*HH*&*&Gkjdjdv65df51df5^^&@TGvhd060262...230"
+const SECRET_KEY = process.env.SECRET || "#!^@*HH*&*&Gkjdjdv65df51df5^^&@TGvhd060262...230"
 const jwt = require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchuser');
 

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = "#!^@*HH*&*&Gkjdjdv65df51df5^^&@TGvhd060262...230"
+const SECRET_KEY = process.env.SECRET ||  "#!^@*HH*&*&Gkjdjdv65df51df5^^&@TGvhd060262...230"
 
 const fetchuser = (req,res,next) => {
     let success = false
