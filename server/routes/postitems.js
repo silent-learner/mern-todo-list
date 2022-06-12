@@ -14,7 +14,7 @@ router.post("/",fetchuser, async (req,res) => {
                 name : req.body.name
             })
             const added = await item.save()
-            console.log(added,"\nSomeone hit your post endpoint");
+            // console.log(added,"\nSomeone hit your post endpoint");
             res.json({success : true,message : "Item added successfully."})
         } else {
             res.status(400).json({success : false,message : "Item already exists."})
@@ -31,10 +31,10 @@ router.post("/:id",fetchuser , async (req , res) => {
         const updated = await Items.updateOne({$and  : [{_id : req.params.id , userid : req.user.id}]} , {$set : {name : req.body.name }})
         if (updated.matchedCount) {
             res.json({success : true,message : "Updated"})
-            console.log(updated,`\nSomeone hit your update endpoint.`)
+            // console.log(updated,`\nSomeone hit your update endpoint.`)
         } else {
             res.status(400).json({success : false ,message : "Item does not exists"});
-            console.log(updated,`\nSomeone hit your update endpoint.`)
+            // console.log(updated,`\nSomeone hit your update endpoint.`)
         }
     } catch (error) {
         console.log(error.message)       

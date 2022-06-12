@@ -21,7 +21,7 @@ export default function Item(props) {
         try {
             let item1 = item.charAt(0).toUpperCase() + item.slice(1)
             const postdata = async () => {
-                const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/post/${id}`, {
+                const data = await fetch(`/post/${id}`, {
                     method: "POST",
                     body: JSON.stringify({
                         name: item1.trim()

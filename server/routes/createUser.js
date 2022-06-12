@@ -83,7 +83,7 @@ router.post("/login", [
 })
 
 //ROUTE : 3 ---> Fetch User from token
-router.post("/fetchuser",fetchuser, async (req, res) => {
+router.get("/fetchuser",fetchuser, async (req, res) => {
   let success = false;
     try {
         const userId = req.user.id ;

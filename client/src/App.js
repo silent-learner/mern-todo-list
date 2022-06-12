@@ -30,11 +30,13 @@ export default function App() {
           color='#00ff37'
         />
         <Alert alert={alert} />
+        
         <Routes>
           <Route path="/" element={<LoginForm setheader={setheader} setprogress={setprogress} showAlert={showAlert} />} />
           <Route path="/signup" element={<SignupForm setheader={setheader} setprogress={setprogress} showAlert={showAlert} />} />
           <Route path="/home" element={<Items header={header} showAlert={showAlert} />} />
         </Routes>
+
       </BrowserRouter>
     </div>
   )

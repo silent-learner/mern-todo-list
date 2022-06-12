@@ -8,7 +8,7 @@ router.delete("/:id",fetchuser,async (req,res) => {
         const item = await  Items.findOneAndDelete({$and : [{_id : req.params.id , userid : req.user.id}]});
         if (item) {
             res.json({success : true ,message : "Item deleted Successfully"});
-            console.log(item,"\nSomeone hit your delete end point");
+            // console.log(item,"\nSomeone hit your delete end point");
         }
         else{
             res.status(400).json({success : false ,message : "Item does not exists"});

@@ -24,7 +24,7 @@ const SignupForm = (props) => {
         setprogress(5)
         try{
             e.preventDefault()
-            const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/createuser`, {
+            const data = await fetch(`/createuser`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"
@@ -40,7 +40,7 @@ const SignupForm = (props) => {
                 set();
                 localStorage.setItem('todo-token', json.authtoken)
                 navigate('/home')
-                props.showAlert("Signed in successfully","danger")
+                props.showAlert("Signed in successfully","success")
                 setprogress(100)
             }
             else{

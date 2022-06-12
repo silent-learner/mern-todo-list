@@ -18,7 +18,7 @@ export default function Items(props) {
         }
         else {
             const fetchdata = async () => {
-                const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/get`, {
+                const data = await fetch(`/get`, {
                     method: "GET",
                     headers: {
                         "Content-type": "application/json",
@@ -27,7 +27,6 @@ export default function Items(props) {
                     }
                 })
                 const json = await data.json()
-                // console.log(json);
                 if (json.success) {
                     setitems(json.list)
                 }
@@ -52,7 +51,7 @@ export default function Items(props) {
                 setitem('');
                 listitem = listitem.charAt(0).toUpperCase() + listitem.slice(1);
                 const postdata = async () => {
-                    const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/post`, {
+                    const data = await fetch(`/post`, {
                         method: "POST",
                         body: JSON.stringify({
                             name: listitem.trim()
@@ -63,11 +62,10 @@ export default function Items(props) {
                         }
                     })
                     const datajson = await data.json()
-                    console.log(datajson);
                     if (datajson.success) {
                         props.showAlert("Item added !!", "success")
                         const fetchdata = async () => {
-                            const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/get`, {
+                            const data = await fetch(`/get`, {
                                 method: "GET",
                                 headers: {
                                     "Content-type": "application/json; charset=UTF-8",
@@ -94,12 +92,11 @@ export default function Items(props) {
     }
 
     const deleteEle = (id) => {
-        const sure = window.confirm("Are you sure to delete this item ? ");
-        if (sure) {
+        if (1) {
             try {
                 setitem('');
                 const postdata = async () => {
-                    const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/delete/${id}`, {
+                    const data = await fetch(`/delete/${id}`, {
                         method: "DELETE",
                         headers: {
                             "Content-type": "application/json; charset=UTF-8",
@@ -109,9 +106,8 @@ export default function Items(props) {
                     const datajson = await data.json()
                     if (datajson.success) {
                         props.showAlert("Item deleted!!", "success")
-                        console.log(datajson);
                         const fetchdata = async () => {
-                            const data = await fetch(`http://${process.env.REACT_APP_IP_ADDRESS}:8080/get`, {
+                            const data = await fetch(`/get`, {
                                 method: "GET",
                                 headers: {
                                     "Content-type": "application/json; charset=UTF-8",
@@ -152,7 +148,7 @@ export default function Items(props) {
                             return (<CSSTransition
                                     in={true}
                                     key={item._id}
-                                    timeout={300}
+                                    timeout={500}
                                     classNames='fade'
                                     unmountOnExit
                                 >

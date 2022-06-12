@@ -2,13 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require("dotenv")
-const URI = "mongodb://localhost:27017/kashifdb"
-
-const PORT = process.env.PORT || 8080
 const app = express()
 app.use(cors())
 app.use(express.json())
-dotenv.config()
+dotenv.config()  
+
+const URI = process.env.MONGO_URI
+// console.log(URI); 
+const PORT = process.env.PORT || 8080
+
 app.use("/get", require("./routes/getitems.js"))
 app.use("/post", require("./routes/postitems.js"))
 app.use("/delete", require("./routes/deleteitems.js"))
